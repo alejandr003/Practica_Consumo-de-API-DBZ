@@ -3,6 +3,7 @@ import "./Home.css";
 import BannerBackground from "../../Assets/home-banner-background.png";
 import GokuVolando from "../../Assets/goku-volando.png";
 import { FiArrowRight } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
@@ -18,9 +19,9 @@ const Home = () => {
                     <p className="primary-text">
                         Busca tus personajes favoritos de Dragon Ball y descubre toda la información sobre ellos.
                     </p>
-                    <button className="secondary-button" onClick={() => window.location.href = "/personajes"}>
-                        Buscar personajes <FiArrowRight />{" "}
-                    </button>
+                    <Link to="/personajes" className="secondary-button">
+                        Buscar personajes <FiArrowRight />
+                    </Link>
                 </div>
                 <div className="home-image-section">
                     <img src={GokuVolando} alt="" />
