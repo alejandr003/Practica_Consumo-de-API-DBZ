@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -8,7 +9,8 @@ import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import dragonBallImage from "../img/DRAGON-BALL-3-12-2025.png";
-import { Margin } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -53,6 +55,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Menubar() {
+    const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            navigate('/personajes', { state: { searchTerm } });
+        }
+    };
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" sx={{ backgroundColor: 'white', color: 'black' }}>
@@ -63,19 +78,24 @@ export default function Menubar() {
                         component="div"
                         sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, fontSize: '1.5rem' }}
                     >
-                        <Box sx={{ display: 'flex', mb: 4 , margin: 2 }}>
-                            <img src={dragonBallImage} style={{ maxWidth: '5%', height: 'auto', maxHeight: '200px' }} alt="Dragon Ball" />
+                        <Box sx={{ display: 'flex', mb: 4, margin: 2 }} component={Link} to="/">
+                            <img src={dragonBallImage} style={{ maxWidth: '8%', height: 'auto', maxHeight: '200px' }} alt="Dragon Ball" />
                         </Box>
                     </Typography>
-                    <Button color="inherit" sx={{ paddingRight:3, fontWeight: 'bold', fontSize: '1.1rem' }}>About</Button>
+                    <Button color="inherit" sx={{ paddingRight: 5, fontWeight: 'bold', fontSize: '1.1rem' }} component={Link} to="/">Home</Button>
+                    <Button color="inherit" sx={{ paddingRight: 5, fontWeight: 'bold', fontSize: '1.1rem' }} component={Link} to="/personajes">Personajes</Button>
+                    <Button color="inherit" sx={{ paddingRight: 5, fontWeight: 'bold', fontSize: '1.1rem' }} component={Link} to="/about">About</Button>
+                    
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
                         </SearchIconWrapper>
                         <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                            sx={{ fontSize: '1rem' }}
+                            placeholder="Buscar..."
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            onKeyDown={handleKeyDown}
+                            sx={{ ml: 1, flex: 1 }}
                         />
                     </Search>
                 </Toolbar>
