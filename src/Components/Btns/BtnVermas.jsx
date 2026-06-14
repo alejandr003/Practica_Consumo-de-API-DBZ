@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 export default function BtnVermas(props) {
     const { character } = props;
 
-    console.log('ID NAV:', character)
     return (
         <div style={{ display: 'flex', justifyContent: 'center', paddingTop:15, paddingBottom:15 }}>
             <Button 
