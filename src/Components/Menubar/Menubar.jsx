@@ -21,25 +21,32 @@ import ListItemText from '@mui/material/ListItemText';
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.black, 0.15),
+    backgroundColor: alpha(theme.palette.primary.main, 0.08),
+    border: `2px solid transparent`,
+    transition: 'all 0.3s ease',
     '&:hover': {
-        backgroundColor: alpha(theme.palette.common.black, 0.25),
+        backgroundColor: alpha(theme.palette.primary.main, 0.12),
+    },
+    '&:focus-within': {
+        backgroundColor: alpha(theme.palette.primary.main, 0.14),
+        borderColor: theme.palette.primary.main,
     },
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(2),
         width: 'auto',
     },
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(0, 1.5),
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    color: theme.palette.primary.main,
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -49,10 +56,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         padding: theme.spacing(1, 1, 1, 0),
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
+        fontSize: '0.95rem',
         [theme.breakpoints.up('sm')]: {
-            width: '12ch',
+            width: '15ch',
             '&:focus': {
-                width: '20ch',
+                width: '25ch',
             },
         },
     },
@@ -80,15 +88,30 @@ export default function Menubar() {
     };
 
     const drawer = (
-        <Box onClick={() => setMobileOpen(false)} sx={{ textAlign: 'center' }}>
-            <Box sx={{ my: 2 }}>
-                <img src={dragonBallImage} style={{ maxWidth: '60px', height: 'auto' }} alt="Dragon Ball" />
+        <Box onClick={() => setMobileOpen(false)} sx={{ textAlign: 'center', py: 2 }}>
+            <Box sx={{ my: 2, mb: 3 }}>
+                <img src={dragonBallImage} style={{ maxWidth: '50px', height: 'auto' }} alt="Dragon Ball" />
             </Box>
             <List>
                 {navItems.map((item) => (
                     <ListItem key={item.label} disablePadding>
-                        <ListItemButton component={Link} to={item.path} sx={{ textAlign: 'center' }}>
-                            <ListItemText primary={item.label} />
+                        <ListItemButton 
+                            component={Link} 
+                            to={item.path} 
+                            sx={{ 
+                                textAlign: 'center',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(254, 158, 13, 0.08)',
+                                }
+                            }}
+                        >
+                            <ListItemText 
+                                primary={item.label}
+                                primaryTypographyProps={{
+                                    fontWeight: 600,
+                                    color: '#2A2E35'
+                                }}
+                            />
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -98,8 +121,16 @@ export default function Menubar() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: 'white', color: 'black' }}>
-                <Toolbar>
+            <AppBar 
+                position="static" 
+                sx={{ 
+                    backgroundColor: 'white', 
+                    color: '#2A2E35',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                    borderBottom: '1px solid #f0f0f0'
+                }}
+            >
+                <Toolbar sx={{ py: 1 }}>
                     <IconButton
                         color="inherit"
                         edge="start"
@@ -117,6 +148,10 @@ export default function Menubar() {
                             textDecoration: 'none',
                             color: 'inherit',
                             mr: 2,
+                            transition: 'transform 0.2s ease',
+                            '&:hover': {
+                                transform: 'scale(1.05)',
+                            }
                         }}
                     >
                         <img
@@ -133,19 +168,41 @@ export default function Menubar() {
                         sx={{
                             flexGrow: 1,
                             display: { xs: 'none', sm: 'block' },
-                            fontWeight: 'bold',
+                            fontWeight: 700,
                             color: 'inherit',
                             textDecoration: 'none',
+                            fontSize: '1.3rem',
+                            letterSpacing: '0.5px',
                         }}
                     >
                         Dragon Ball
                     </Typography>
-                    <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }}>
+                    <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 0.5 }}>
                         {navItems.map((item) => (
                             <Button
                                 key={item.label}
                                 color="inherit"
-                                sx={{ fontWeight: 'bold', fontSize: '1rem', px: 2 }}
+                                sx={{ 
+                                    fontWeight: 600, 
+                                    fontSize: '0.95rem', 
+                                    px: 2,
+                                    py: 1,
+                                    position: 'relative',
+                                    '&::after': {
+                                        content: '""',
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        left: '50%',
+                                        width: 0,
+                                        height: '2px',
+                                        backgroundColor: '#fe9e0d',
+                                        transform: 'translateX(-50%)',
+                                        transition: 'width 0.3s ease',
+                                    },
+                                    '&:hover::after': {
+                                        width: '100%',
+                                    }
+                                }}
                                 component={Link}
                                 to={item.path}
                             >
