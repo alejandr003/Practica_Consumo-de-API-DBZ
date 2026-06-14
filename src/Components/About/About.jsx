@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./About.css";
 import BannerBackground from "../../Assets/home-banner-background.png";
 import ProfilePic from "../../Assets/yisus-image.png";
@@ -8,10 +8,29 @@ import { useNavigate } from 'react-router-dom';
 
 const About = () => {
     const navigate = useNavigate();
+    const [email, setEmail] = useState('');
 
     const handleSubmit = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.trim()) {
+            Swal.fire({
+                title: "Campo vacío",
+                text: "Por favor ingresa un correo electrónico.",
+                icon: "warning",
+            });
+            return;
+        }
+        if (!emailRegex.test(email)) {
+            Swal.fire({
+                title: "Correo inválido",
+                text: "Por favor ingresa un correo electrónico válido.",
+                icon: "error",
+            });
+            return;
+        }
         Swal.fire({
             title: "Enviado!",
+            text: "Gracias por contactarnos.",
             icon: "success",
             draggable: true
         }).then(() => {
@@ -23,14 +42,14 @@ const About = () => {
         <div>
             <div className="work-section-wrapper">
                 <div className="work-section-top">
-                    <h1 className="primary-heading">¿Quién está detras?</h1>
+                    <h1 className="primary-heading">¿Quién está detrás?</h1>
                     <p className="primary-text">
                         Lorem ipsum dolor sit amet consectetur. Non tincidunt magna non et
                         elit. Dolor turpis molestie dui magnis facilisis at fringilla quam.
                     </p>
                 </div>
                 <div className="testimonial-section-bottom">
-                    <img src={ProfilePic} alt="" />
+                    <img src={ProfilePic} alt="Alejandro Chan - Desarrollador" />
                     <p>
                         Desarrollador en aprendizaje continuo y amante de la tecnología.
                         Aplicando conocimientos de React y Node.js para crear aplicaciones
@@ -50,10 +69,16 @@ const About = () => {
                 <div className="home-bannerImage-container">
                     <img src={BannerBackground} alt="" />
                 </div>
-                <h1 className="primary-heading">¿Tienes alguna duda sobre el uso de la API?</h1> <br />
+                <h1 className="primary-heading">¿Tienes alguna duda sobre el uso de la API?</h1>
                 <h1 className="primary-heading">Dejame ayudarte</h1>
                 <div className="contact-form-container">
-                    <input type="email" placeholder="yisusDbz@gmail.com" />
+                    <input
+                        type="email"
+                        placeholder="yisusDbz@gmail.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        aria-label="Correo electrónico"
+                    />
                     <button className="secondary-button" onClick={handleSubmit}>Submit</button>
                 </div>
             </div>
