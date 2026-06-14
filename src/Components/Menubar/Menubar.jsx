@@ -9,8 +9,14 @@ import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import dragonBallImage from "../img/DRAGON-BALL-3-12-2025.png";
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -19,7 +25,6 @@ const Search = styled('div')(({ theme }) => ({
     '&:hover': {
         backgroundColor: alpha(theme.palette.common.black, 0.25),
     },
-    marginLeft: 50,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(1),
@@ -42,7 +47,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: '100%',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         [theme.breakpoints.up('sm')]: {
@@ -54,8 +58,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
+const navItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Personajes', path: '/personajes' },
+    { label: 'About', path: '/about' },
+];
+
 export default function Menubar() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [mobileOpen, setMobileOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleSearchChange = (event) => {
@@ -68,24 +79,80 @@ export default function Menubar() {
         }
     };
 
+    const drawer = (
+        <Box onClick={() => setMobileOpen(false)} sx={{ textAlign: 'center' }}>
+            <Box sx={{ my: 2 }}>
+                <img src={dragonBallImage} style={{ maxWidth: '60px', height: 'auto' }} alt="Dragon Ball" />
+            </Box>
+            <List>
+                {navItems.map((item) => (
+                    <ListItem key={item.label} disablePadding>
+                        <ListItemButton component={Link} to={item.path} sx={{ textAlign: 'center' }}>
+                            <ListItemText primary={item.label} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
+    );
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" sx={{ backgroundColor: 'white', color: 'black' }}>
                 <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        edge="start"
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Box
+                        component={Link}
+                        to="/"
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            textDecoration: 'none',
+                            color: 'inherit',
+                            mr: 2,
+                        }}
+                    >
+                        <img
+                            src={dragonBallImage}
+                            style={{ width: '40px', height: 'auto', marginRight: '8px' }}
+                            alt="Dragon Ball"
+                        />
+                    </Box>
                     <Typography
                         variant="h6"
                         noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, fontSize: '1.5rem' }}
+                        component={Link}
+                        to="/"
+                        sx={{
+                            flexGrow: 1,
+                            display: { xs: 'none', sm: 'block' },
+                            fontWeight: 'bold',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}
                     >
-                        <Box sx={{ display: 'flex', mb: 4, margin: 2 }} component={Link} to="/">
-                            <img src={dragonBallImage} style={{ maxWidth: '8%', height: 'auto', maxHeight: '200px' }} alt="Dragon Ball" />
-                        </Box>
+                        Dragon Ball
                     </Typography>
-                    <Button color="inherit" sx={{ paddingRight: 5, fontWeight: 'bold', fontSize: '1.1rem' }} component={Link} to="/">Home</Button>
-                    <Button color="inherit" sx={{ paddingRight: 5, fontWeight: 'bold', fontSize: '1.1rem' }} component={Link} to="/personajes">Personajes</Button>
-                    <Button color="inherit" sx={{ paddingRight: 5, fontWeight: 'bold', fontSize: '1.1rem' }} component={Link} to="/about">About</Button>
-                    
+                    <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }}>
+                        {navItems.map((item) => (
+                            <Button
+                                key={item.label}
+                                color="inherit"
+                                sx={{ fontWeight: 'bold', fontSize: '1rem', px: 2 }}
+                                component={Link}
+                                to={item.path}
+                            >
+                                {item.label}
+                            </Button>
+                        ))}
+                    </Box>
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
@@ -95,11 +162,18 @@ export default function Menubar() {
                             value={searchTerm}
                             onChange={handleSearchChange}
                             onKeyDown={handleKeyDown}
-                            sx={{ ml: 1, flex: 1 }}
                         />
                     </Search>
                 </Toolbar>
             </AppBar>
+            <Drawer
+                anchor="left"
+                open={mobileOpen}
+                onClose={() => setMobileOpen(false)}
+                sx={{ display: { sm: 'none' } }}
+            >
+                {drawer}
+            </Drawer>
         </Box>
     );
 }
